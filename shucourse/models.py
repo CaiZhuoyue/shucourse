@@ -1,0 +1,53 @@
+from shucourse import db,login_manager
+from flask_login import UserMixin
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    stu=Student.query.get((user_id))
+    te=Teacher.query.get((user_id))
+    if stu:
+        return stu
+    else:
+        return te
+
+class Student(db.Model,UserMixin):
+    student_id=db.Column(db.String(8),primary_key=True,unique=True)
+    student_name=db.Column(db.String(20),nullable=False)
+    student_password=db.Column(db.String(20),nullable=False)
+    student_dept=db.Column(db.String(2),nullable=False)
+    # backref就是类似与新建一列
+    selects=db.relationship('Select',backref='student',lazy=True)
+    # 定义如何输出
+    def __repr__(self):
+        return f"Student('{self.student_id}','{self.student_name}','{self.student_password}','{self.student_dept}')"
+
+class Teacher(db.Model,UserMixin):
+    teacher_id=db.Column(db.String(8),primary_key=True,unique=True)
+    teacher_name=db.Column(db.String(20),nullable=False)
+    teacher_password=db.Column(db.String(20),nullable=False)
+    teacher_dept=db.Column(db.Integer,nullable=False)
+    def __repr__(self):
+        return f"Teacher('{self.teacher_id}','{self.teacher_name}','{self.teacher_password}','{self.teacher_dept}')"
+
+# 课程表
+class Course(db.Model):
+    course_id=db.Column(db.String(8),primary_key=True,unique=True)
+    course_name=db.Column(db.String(20),nullable=False)
+    # 课程的老师号
+    course_teacher=db.Column(db.String(8),nullable=False)
+    def __repr__(self):
+        return f"Course('{self.course_id}','{self.course_name}','{self.course_teacher}')"
+
+# 选课表
+class Select(db.Model):
+    select_id=db.Column(db.Integer,primary_key=True,unique=True)
+    # 外键
+    course_id=db.Column(db.String(8),db.ForeignKey('course.course_id'),nullable=False)
+    # 外键
+    student_id=db.Column(db.String(8),db.ForeignKey('student.student_id'),nullable=False)
+    def __repr__(self):
+        return f"Select('{self.course_id}','{self.student_id}'"
+
+
+
