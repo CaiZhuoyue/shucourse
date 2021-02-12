@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block content %}
+<legend>退课</legend>
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{form.course_id.label(class="form-control-label") }}
+                    {{form.course_id(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{form.teacher_id.label(class="form-control-label") }}
+                    {{form.teacher_id(class="form-control form-control-lg") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info btn-red") }}
+            </div>
+        </form>
+    </div>
+    {% if courses %}
+      <table class="table table-striped">
+        <strong>已选课程</strong>
+        <thead>
+            <td>课程号</td>
+            <td>课程名</td>
+            <td>教师号</td>
+        </thead>
+        {% for course in courses %}
+        <tr>
+            <td>{{course.course_id}}</td>
+            <td>{{course.course_name}}</td>
+            <td>{{course.teacher_id}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      {% else %}
+      <p>暂时没有选课哦</p>
+      {% endif %}
+   
+{% endblock content %}

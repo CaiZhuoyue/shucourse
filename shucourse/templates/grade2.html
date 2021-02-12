@@ -1,0 +1,22 @@
+{% extends "layout2.html" %}
+{% block content %}
+{% if courses %}
+      <table class="table table-striped">
+        <strong>已选课程</strong>
+        <thead>
+            <td>课程号</td>
+            <td>课程名</td>
+            <td>教师号</td>
+        </thead>
+        {% for course in courses %}
+        <tr>
+            <td>{{course.course_id}}</td>
+            <td>{{course.course_name}}</td>
+            <td>{{course.teacher_id}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      {% else %}
+      <p>暂时没有人选您的课哦</p>
+      {% endif %}
+{% endblock content%}

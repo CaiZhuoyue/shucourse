@@ -8,3 +8,14 @@ class LoginForm(FlaskForm):
     remember=BooleanField(u'记住我')
     submit=SubmitField(u'登陆')
     
+class XuankeForm(FlaskForm):
+    # student_id=StringField()
+    course_id=StringField(u'课程号:',validators=[DataRequired(),Length(min=8,max=8)])
+    teacher_id=StringField(u'教师号:',validators=[DataRequired(),Length(min=8,max=8)])
+    submit=SubmitField(u'选课')
+
+class DeleteForm(FlaskForm):
+    # student_id=StringField()
+    course_id=StringField(u'课程号:',validators=[DataRequired(),Length(min=8,max=8)])
+    teacher_id=StringField(u'教师号:',validators=[DataRequired(),Length(min=8,max=8)])
+    submit=SubmitField(u'退课')

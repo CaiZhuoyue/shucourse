@@ -1,14 +1,14 @@
-{% extends "layout.html" %}
+{% extends "layout2.html" %}
 {% block content %}
     <div class="content-section">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             {{ form.csrf_token }}
-            <legend>学生登陆</legend>
+            <legend>教师登陆</legend>
             <fieldset class="form-group">
                 <!-- <legend></legend> -->
                 <div class="alert">
-                    注意：初始密码是学号！
+                    注意：初始密码是工号！
                 </div>
                 <div class="form-group">
                     {{form.user_id.label(class="form-control-label") }}
