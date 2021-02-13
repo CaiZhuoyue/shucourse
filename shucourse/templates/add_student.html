@@ -1,0 +1,49 @@
+{% extends "layout3.html" %}
+{% block content %}
+<legend>学生管理</legend>
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{form.student_id.label(class="form-control-label") }}
+                    {{form.student_id(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{form.student_name.label(class="form-control-label") }}
+                    {{form.student_name(class="form-control form-control-lg") }}
+                </div>
+               
+                <div class="form-group">
+                    {{form.student_dept.label(class="form-control-label") }}
+                    {{form.student_dept(class="form-control form-control-lg") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info btn-green") }}
+            </div>
+        </form>
+    </div>
+    {% if students %}
+      <table class="table table-striped">
+        <strong>学生信息</strong>
+        <thead>
+            <td>学号</td>
+            <td>姓名</td>
+            <td>学院号</td>
+        </thead>
+        {% for student in students %}
+        <tr>
+            <td>{{student.id}}</td>
+            <td>{{student.student_name}}</td>
+            <td>{{student.student_dept}}</td>
+            <td><a>delete</a></td>
+        </tr>
+        {% endfor %}
+      </table>
+      {% else %}
+      <p>暂时没有学生哦</p>
+      {% endif %}
+
+{% endblock %}

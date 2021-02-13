@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+<legend>修改密码</legend>
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{form.password.label(class="form-control-label") }}
+                    {{form.password(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{form.confirm.label(class="form-control-label") }}
+                    {{form.confirm(class="form-control form-control-lg") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info btn-green") }}
+            </div>
+        </form>
+    </div>
+{% endblock %}

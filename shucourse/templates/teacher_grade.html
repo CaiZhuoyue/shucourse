@@ -5,14 +5,15 @@
         <strong>{{course_name}}分数统计</strong>
         <thead>
             <td>学生号</td>
+            <td>学生姓名</td>
             <td>分数</td>
         </thead>
         {% for student in students %}
-        <tr>
+          <tr> 
             <td>{{student.student_id}}</td>
+            <td>{{student.student_name}}</td>
             <td>{{student.grade}}</td>
-        </tr>
-        </a>
+          </tr> 
         {% endfor %}
       </table>
       {% else %}

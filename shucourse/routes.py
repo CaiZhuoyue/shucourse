@@ -1,7 +1,7 @@
 # 路由信息
 from shucourse.models import Student,Teacher,Course,Select,Admin
 from shucourse import app,db,bcrypt,login_manager
-from shucourse.forms import LoginForm,XuankeForm,DeleteForm
+from shucourse.forms import LoginForm,XuankeForm,DeleteForm,StudentForm,TeacherForm,CourseForm,ChangeForm
 from flask import render_template,url_for,flash,redirect,request
 from flask_login import login_user,current_user,logout_user,login_required
 @app.route('/')
@@ -62,12 +62,13 @@ def teacher_login():
 @app.route('/admin/login',methods=['GET','POST'])
 def admin_login():
     if current_user.is_authenticated:
+        flash('您已登陆！')
         return redirect(url_for('admin_home'))
     form = LoginForm()
     if form.validate():
-        user = Admin.query.filter_by(id=form.user_id.data).first()
+        user = Admin.query.get(form.user_id.data)
         if user and user.admin_password==form.password.data:
-            login_user(user,remember=form.remember.data)
+            login_user(user)
             next_page=request.args.get('next')
             if(next_page):
                 return redirect(next_page) 
@@ -122,31 +123,31 @@ def delete_course():
         return redirect(url_for('home'))
     return render_template('delete.html',form=form,courses=courses)
 
+@app.route('/student/changepass')
+@login_required
+def student_pwd():
+    form=ChangeForm()
+    if form.validate():
+        # student = Student(id=form.student_id.data,student_name=form.student_name.data,student_password=form.student_id.data,student_dept=form.student_dept.data)
+        # db.session.add(student)
+        # db.session.commit()
+        return redirect(url_for('home'))
+    return render_template('change.html',form=form)
+
 
 @app.route('/teacher/course')
 @login_required
 def teacher_course():
     # courses=Select.query.filter_by(teacher_id=current_user.id).distinct()
     courses=Select.query.with_entities(Select.course_id,Select.course_name).filter_by(teacher_id=current_user.id).distinct()
-
-    # form=XuankeForm()
-    # if form.validate():
-    #     select_course=Course.query.filter_by(course_id=form.course_id.data).first()
-    #     if select_course:
-    #         select = Select(student_id=current_user.id,course_id=form.course_id.data,teacher_id=form.teacher_id.data,course_name=select_course.course_name)
-    #         db.session.add(select)
-    #         db.session.commit()
-    #     flash(u'选课成功','success')
-    #     return redirect(url_for('home'))
     return render_template('teacher_course.html',courses=courses)
 
 
 @app.route('/teacher/grade')
 @login_required
 def teacher_grade():
-    students=Select.query.filter_by(teacher_id=current_user.id)
-    # course_id=course_id
-    return render_template('teacher_grade.html',students=students)
+    big=Student.query.join(Select,Student.id==Select.student_id).add_columns(Select.course_id,Student.student_name,Select.student_id,Student.student_dept).distinct()
+    return render_template('teacher_grade.html',students=big)
 
 @app.route('/teacher/home')
 @login_required
@@ -154,7 +155,6 @@ def teacher_home():
     return render_template('home2.html')
 
 @app.route('/admin/home')
-@login_required
 def admin_home():
     return render_template('home3.html')
 
@@ -164,15 +164,44 @@ def student_grade():
     return "你想查成绩吗？"
 
 
-@app.route('/admin/student')
+@app.route('/admin/student',methods=['GET','POST'])
+# @login_required
 def add_student():
-    return 'add student'
+    students=Student.query.all()
+    form=StudentForm()
+    if form.validate():
+        student = Student(id=form.student_id.data,student_name=form.student_name.data,student_password=form.student_id.data,student_dept=form.student_dept.data)
+        db.session.add(student)
+        db.session.commit()
+        students=Student.query.all()
+        return redirect(url_for('admin_home'))
+    return render_template('add_student.html',students=students,form=form)
 
-@app.route('/admin/teacher')
+
+@app.route('/admin/teacher',methods=['GET','POST'])
+# @login_required
 def add_teacher():
-    return 'add teacher'
+    teachers=Teacher.query.all()
+    form=TeacherForm()
+    if form.validate():
+        teacher = Teacher(id=form.teacher_id.data,teacher_name=form.teacher_name.data,teacher_password=form.teacher_id.data,teacher_dept=form.teacher_dept.data)
+        db.session.add(teacher)
+        db.session.commit()
+        teachers=Teacher.query.all()
+        return redirect(url_for('admin_home'))
+    return render_template('add_teacher.html',teachers=teachers,form=form)
 
-@app.route('/admin/course')
+
+@app.route('/admin/course',methods=['GET','POST'])
+# @login_required
 def add_course():
-    return 'add course'
+    courses=Course.query.all()
+    form=CourseForm()
+    if form.validate():
+        course = Course(course_id=form.course_id.data,course_name=form.course_name.data,course_teacher=form.course_teacher.data)
+        db.session.add(course)
+        db.session.commit()
+        courses=Course.query.all()
+        return redirect(url_for('admin_home'))
+    return render_template('add_course.html',courses=courses,form=form)
 

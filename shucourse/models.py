@@ -34,7 +34,6 @@ class Teacher(db.Model,UserMixin):
         return f"Teacher('{self.id}','{self.teacher_name}','{self.teacher_password}','{self.teacher_dept}')"
 
 # 管理员
-
 class Admin(db.Model,UserMixin):
     id=db.Column(db.String(4),primary_key=True,unique=True)
     admin_password=db.Column(db.String(20),nullable=False)

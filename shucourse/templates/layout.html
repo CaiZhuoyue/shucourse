@@ -27,6 +27,7 @@
                       {% if current_user.is_authenticated %} 
                       <div>欢迎您{{current_user.id}}</div>
                       <a class="nav-item nav-link" href="{{url_for('logout')}}">退出</a> 
+                      <a class="nav-item nav-link" href="{{url_for('student_pwd')}}">修改密码</a> 
                       {% else %}
                       <a class="nav-item nav-link" href="{{url_for('login')}}">登陆</a> 
                       {% endif %}
