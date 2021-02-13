@@ -1,12 +1,23 @@
 # SHU-course-system
 
-上海大学计算机学院2021数据库1大作业 SHU选课系统
+上海大学计算机学院2021数据库1大作业 选课系统
 
 by 可爱的蔡卓悦
 
 ### 项目技术栈：
 后端 python flask框架
-前端 bootstrap
+前端 bootstrap 或者 react+antd
+
+### 应用背景
+简易的选课系统
+功能仿上海大学选课系统
+
+### 数据库表
+1. Student
+2. Teacher
+3. Course
+4. Select
+
 
 ### 项目文件目录
 - static文件夹：css样式文件
