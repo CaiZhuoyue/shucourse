@@ -13,17 +13,20 @@ by 可爱的蔡卓悦
 - templated文件夹：html网页
   - layout.html 学生选课系统的基本页面
   - layout2.html 老师系统的基本页面
+  - layout3.html 管理员登陆的基本页面
   - login.html 学生登陆页面
   - login2.html 老师登陆页面
+  - login3.html 管理员登陆页面
   - select.html 学生选课页面
   - delete.html 学生退课页面
   - welcome.html **所有用户**经过的欢迎页面
   - home.html 学生home
   - home2.html 教师home
   - home3.html 管理员home
-  - grade.html 学生成绩查询
-  - grade2.html 教师登/修改成绩
+  - grade.html 学生成绩查询-表格
   - about.html 关于本项目的介绍
+  - teacher_course.html 老师查询自己所教授的课程
+  - teacher_grade.html 老师录某一门课成绩
 - routes.py 路由和处理
 - models.py 模型和类
 - forms.py 各种表单的提交
