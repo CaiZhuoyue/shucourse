@@ -13,22 +13,20 @@
                 <div class="col-lg-2"></div>
                 <div class="col-lg-8">
               <div class="navbar-header">
-                <a class="navbar-brand" href="{{url_for('teacher_home')}}">shucourse</a>
+                <a class="navbar-brand" href="{{url_for('admin_home')}}">shucourse</a>
               </div>
               <!-- Collect the nav links, forms, and other content for toggling -->
               <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul class="nav navbar-nav">
-                    <li><a href="{{url_for('teacher_course')}}">授课<span class="sr-only">(current)</span></a></li>
-                    <!-- <li><a href="{{url_for('select_course')}}">选课</a></li> -->
-                    <!-- <li><a href="{{url_for('delete_course')}}">退课</a></li> -->
+                    <li><a href="{{url_for('add_student')}}">学生信息管理</a></li>
+                    <li><a href="{{url_for('add_teacher')}}">教师信息管理</a></li>
+                    <li><a href="{{url_for('add_course')}}">课程信息管理</a></li>
                   </ul>
-
                   <ul class="nav navbar-nav navbar-right">
                       {% if current_user.is_authenticated %} 
-                      <div>欢迎老师{{current_user.id}}</div>
+                      <div>欢迎管理员</div>
                       <a class="nav-item nav-link" href="{{url_for('logout')}}">退出</a> 
                       {% else %}
-                      <a class="nav-item nav-link" href="{{url_for('teacher_login')}}">登陆</a> 
                       {% endif %}
                   </ul>
               </div><!-- /.navbar-collapse -->

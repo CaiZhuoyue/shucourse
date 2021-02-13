@@ -1,0 +1,29 @@
+{% extends "layout3.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            {{ form.csrf_token }}
+            <legend>管理员登陆</legend>
+            <fieldset class="form-group">
+                <!-- <legend></legend> -->
+                <div class="alert">
+                    管理员账号是00000000
+                    管理员密码是Admin123
+                </div>
+                <div class="form-group">
+                    {{form.user_id.label(class="form-control-label") }}
+                    {{form.user_id(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{form.password.label(class="form-control-label") }}
+                    {{form.password(class="form-control form-control-lg") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+
+{% endblock content %}

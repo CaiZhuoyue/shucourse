@@ -2,17 +2,16 @@
 {% block content %}
 {% if courses %}
       <table class="table table-striped">
-        <strong>已选课程</strong>
+        <strong>已授课程</strong>
         <thead>
             <td>课程号</td>
             <td>课程名</td>
-            <td>教师号</td>
         </thead>
         {% for course in courses %}
         <tr>
-            <td>{{course.course_id}}</td>
+            <td><a href="{{url_for('teacher_grade',course_id=course.course_id,course_name=course.course_name)}}">
+              {{course.course_id}}</a></td>
             <td>{{course.course_name}}</td>
-            <td>{{course.teacher_id}}</td>
         </tr>
         {% endfor %}
       </table>

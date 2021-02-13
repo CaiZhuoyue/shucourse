@@ -1,5 +1,5 @@
 # 路由信息
-from shucourse.models import Student,Teacher,Course,Select
+from shucourse.models import Student,Teacher,Course,Select,Admin
 from shucourse import app,db,bcrypt,login_manager
 from shucourse.forms import LoginForm,XuankeForm,DeleteForm
 from flask import render_template,url_for,flash,redirect,request
@@ -58,6 +58,24 @@ def teacher_login():
             flash('登陆失败！','error')
     return render_template('login2.html',form=form)
 
+#管理员登陆
+@app.route('/admin/login',methods=['GET','POST'])
+def admin_login():
+    if current_user.is_authenticated:
+        return redirect(url_for('admin_home'))
+    form = LoginForm()
+    if form.validate():
+        user = Admin.query.filter_by(id=form.user_id.data).first()
+        if user and user.admin_password==form.password.data:
+            login_user(user,remember=form.remember.data)
+            next_page=request.args.get('next')
+            if(next_page):
+                return redirect(next_page) 
+            else:
+                return redirect(url_for('admin_home'))
+        else:
+            flash('登陆失败！','error')
+    return render_template('login3.html',form=form)
     
 #退出登录
 @app.route('/logout')
@@ -105,10 +123,12 @@ def delete_course():
     return render_template('delete.html',form=form,courses=courses)
 
 
-@app.route('/teacher/grade')
+@app.route('/teacher/course')
 @login_required
-def teacher_grade():
-    courses=Select.query.filter_by(teacher_id=current_user.id)
+def teacher_course():
+    # courses=Select.query.filter_by(teacher_id=current_user.id).distinct()
+    courses=Select.query.with_entities(Select.course_id,Select.course_name).filter_by(teacher_id=current_user.id).distinct()
+
     # form=XuankeForm()
     # if form.validate():
     #     select_course=Course.query.filter_by(course_id=form.course_id.data).first()
@@ -118,14 +138,41 @@ def teacher_grade():
     #         db.session.commit()
     #     flash(u'选课成功','success')
     #     return redirect(url_for('home'))
-    return render_template('grade2.html',courses=courses)
+    return render_template('teacher_course.html',courses=courses)
+
+
+@app.route('/teacher/grade')
+@login_required
+def teacher_grade():
+    students=Select.query.filter_by(teacher_id=current_user.id)
+    # course_id=course_id
+    return render_template('teacher_grade.html',students=students)
 
 @app.route('/teacher/home')
 @login_required
 def teacher_home():
     return render_template('home2.html')
 
+@app.route('/admin/home')
+@login_required
+def admin_home():
+    return render_template('home3.html')
+
 @app.route('/student/grade')
 @login_required
 def student_grade():
     return "你想查成绩吗？"
+
+
+@app.route('/admin/student')
+def add_student():
+    return 'add student'
+
+@app.route('/admin/teacher')
+def add_teacher():
+    return 'add teacher'
+
+@app.route('/admin/course')
+def add_course():
+    return 'add course'
+

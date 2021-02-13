@@ -11,6 +11,7 @@ def load_user(user_id):
     else:
         return te
 
+#学生
 class Student(db.Model,UserMixin):
     # student_id=db.Column(db.String(8),primary_key=True,unique=True)
     id=db.Column(db.String(8),primary_key=True,unique=True)
@@ -23,13 +24,22 @@ class Student(db.Model,UserMixin):
     def __repr__(self):
         return f"Student('{self.id}','{self.student_name}','{self.student_password}','{self.student_dept}')"
 
+#教师
 class Teacher(db.Model,UserMixin):
-    id=db.Column(db.String(8),primary_key=True,unique=True)
+    id=db.Column(db.String(4),primary_key=True,unique=True)
     teacher_name=db.Column(db.String(20),nullable=False)
     teacher_password=db.Column(db.String(20),nullable=False)
     teacher_dept=db.Column(db.Integer,nullable=False)
     def __repr__(self):
         return f"Teacher('{self.id}','{self.teacher_name}','{self.teacher_password}','{self.teacher_dept}')"
+
+# 管理员
+
+class Admin(db.Model,UserMixin):
+    id=db.Column(db.String(4),primary_key=True,unique=True)
+    admin_password=db.Column(db.String(20),nullable=False)
+    def __repr__(self):
+        return f"Admin('{self.id}','{self.admin_password}')"
 
 # 课程表
 class Course(db.Model):
@@ -48,7 +58,7 @@ class Select(db.Model):
     course_id=db.Column(db.String(8),db.ForeignKey('course.course_id'),nullable=False)
     course_name=db.Column(db.String(20),db.ForeignKey('course.course_name'),nullable=False)
     # 外键
-    teacher_id=db.Column(db.String(8),db.ForeignKey('teacher.id'),nullable=False)
+    teacher_id=db.Column(db.String(4),db.ForeignKey('teacher.id'),nullable=False)
     # 外键
     student_id=db.Column(db.String(8),db.ForeignKey('student.id'),nullable=False)
     def __repr__(self):
