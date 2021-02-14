@@ -37,7 +37,7 @@
             <td>{{course.course_id}}</td>
             <td>{{course.course_name}}</td>
             <td>{{course.course_teacher}}</td>
-            <td><a>delete</a></td>
+            <td><a href="{{url_for('admin_delete_course',s_id=course.course_id)}}">delete</a></td>
         </tr>
         {% endfor %}
       </table>

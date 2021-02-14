@@ -1,9 +1,10 @@
 # 路由信息
 from shucourse.models import Student,Teacher,Course,Select,Admin
 from shucourse import app,db,bcrypt,login_manager
-from shucourse.forms import LoginForm,XuankeForm,DeleteForm,StudentForm,TeacherForm,CourseForm,ChangeForm
+from shucourse.forms import LoginForm,XuankeForm,DeleteForm,GradeForm,StudentForm,TeacherForm,CourseForm,ChangeForm
 from flask import render_template,url_for,flash,redirect,request
 from flask_login import login_user,current_user,logout_user,login_required
+from sqlalchemy import func
 @app.route('/')
 def welcome():
     return render_template('welcome.html')
@@ -90,20 +91,21 @@ def logout():
 @login_required
 def select_course():
     courses=Select.query.filter_by(student_id=current_user.id)
+    xy_courses=Course.query.all()
     form=XuankeForm()
-    # if Select.query.filter_by(student_id=current_user.id).first():
-    #     courses=Select.query.filter_by(student_id=current_user.id).first()
-    #     render_template('xuanke.html',courses=courses,form=form)
     if form.validate():
         # 有这门课
         select_course=Course.query.filter_by(course_id=form.course_id.data).first()
-        if select_course:
+        already_select=Select.query.filter_by(course_id=form.course_id.data,student_id=current_user.id).first()
+        if already_select:
+            return render_template('select.html',form=form,xy_courses=xy_courses,courses=courses,message="重复选课")
+        elif select_course:
             select = Select(student_id=current_user.id,course_id=form.course_id.data,teacher_id=form.teacher_id.data,course_name=select_course.course_name)
             db.session.add(select)
             db.session.commit()
-        flash(u'选课成功','success')
-        return redirect(url_for('home'))
-    return render_template('select.html',form=form,courses=courses)
+        else:
+            return render_template('select.html',form=form,courses=courses,xy_courses=xy_courses,message="课程不存在")
+    return render_template('select.html',form=form,xy_courses=xy_courses,courses=courses)
 
 @app.route('/student/delete',methods=['GET','POST'])
 @login_required
@@ -135,7 +137,6 @@ def student_pwd():
         return redirect(url_for('home'))
     return render_template('change.html',form=form)
 
-
 @app.route('/teacher/course')
 @login_required
 def teacher_course():
@@ -143,12 +144,18 @@ def teacher_course():
     courses=Select.query.with_entities(Select.course_id,Select.course_name).filter_by(teacher_id=current_user.id).distinct()
     return render_template('teacher_course.html',courses=courses)
 
-
-@app.route('/teacher/grade')
+@app.route('/teacher/grade',methods=['GET','POST'])
 @login_required
 def teacher_grade():
-    big=Student.query.join(Select,Student.id==Select.student_id).add_columns(Select.course_id,Student.student_name,Select.student_id,Student.student_dept).distinct()
-    return render_template('teacher_grade.html',students=big)
+    form=GradeForm()
+    big=Student.query.join(Select,Student.id==Select.student_id).add_columns(Select.course_id,Student.student_name,Select.student_id,Student.student_dept,Select.student_grade).distinct()
+    if(form.validate()):
+        select=Select.query.filter_by(student_id=form.student_id.data).first()
+        select.student_grade=(form.grade.data)
+        db.session.commit()
+        big=Student.query.join(Select,Student.id==Select.student_id).add_columns(Select.course_id,Student.student_name,Select.student_id,Student.student_dept,Select.student_grade).distinct()
+        return render_template('teacher_grade.html',students=big,form=form)
+    return render_template('teacher_grade.html',students=big,form=form)
 
 @app.route('/teacher/home')
 @login_required
@@ -162,9 +169,10 @@ def admin_home():
 @app.route('/student/grade')
 @login_required
 def student_grade():
-    # return "你想查成绩吗？"
     courses=Select.query.filter_by(student_id=current_user.id).all()
-    return render_template('grade.html',courses=courses)
+    # avg_grade=Select.query.with_entities(func.avg(Select.student_grade).label('average')).filter(Select.student_id==current_user.id,Select.student_grade!=None)
+    avg_grade=Select.query.with_entities(func.avg(Select.student_grade).label('average')).filter(Select.student_id==current_user.id)
+    return render_template('grade.html',courses=courses,avg_grade=avg_grade)
 
 @app.route('/admin/student',methods=['GET','POST'])
 # @login_required
@@ -179,6 +187,37 @@ def add_student():
         return redirect(url_for('admin_home'))
     return render_template('add_student.html',students=students,form=form)
 
+@app.route('/admin/student/<string:s_id>',methods=['GET','POST'])
+# @login_required
+def delete_student(s_id):
+    form=StudentForm()
+    student=Student.query.filter_by(id=s_id).first()
+    # 外键约束
+    select=Select.query.filter_by(student_id=s_id).first()
+    while select:
+        db.session.delete(select)
+        db.session.commit()
+        select=Select.query.filter_by(student_id=s_id).first()
+    db.session.delete(student)
+    db.session.commit()
+    students=Student.query.all()
+    return render_template('add_student.html',students=students,form=form)
+
+@app.route('/admin/course/<string:s_id>',methods=['GET','POST'])
+# @login_required
+def admin_delete_course(s_id):
+    form=CourseForm()
+    course=Course.query.filter_by(course_id=s_id).first()
+    # 外键约束
+    select=Select.query.filter_by(course_id=s_id).first()
+    while select:
+        db.session.delete(select)
+        db.session.commit()
+        select=Select.query.filter_by(course_id=s_id).first()
+    db.session.delete(course)
+    db.session.commit()
+    courses=Course.query.all()
+    return render_template('add_course.html',courses=courses,form=form)
 
 @app.route('/admin/teacher',methods=['GET','POST'])
 # @login_required

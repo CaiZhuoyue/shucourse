@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,BooleanField,SubmitField
+from wtforms import StringField,PasswordField,BooleanField,SubmitField,IntegerField
 from wtforms.validators import DataRequired, Length,EqualTo
 from shucourse.models import Student,Teacher,Admin,Course,Select
 class LoginForm(FlaskForm):
@@ -32,6 +32,12 @@ class TeacherForm(FlaskForm):
     teacher_name=StringField(u'姓名:',validators=[DataRequired(),Length(min=2,max=20)])
     teacher_dept=StringField(u'学院号:',validators=[DataRequired(),Length(min=1,max=2)])
     submit=SubmitField(u'添加教师')
+
+
+class GradeForm(FlaskForm):
+    student_id=StringField(u'学号:',validators=[DataRequired(),Length(min=8,max=8)])
+    grade=IntegerField(u'成绩',validators=[DataRequired()])
+    submit=SubmitField(u'添加成绩')
 
 
 class CourseForm(FlaskForm):

@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 {% block content %}
 <legend>选课</legend>
+<div class="row">
+    <div class="col-lg-12">
     <div class="content-section">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
@@ -20,6 +22,16 @@
             </div>
         </form>
     </div>
+  
+</div> 
+<!-- 左半边结束 -->
+</div>
+    {% if message %}
+    <strong><div style="color:red;">{{message}}</div></strong>
+    {% endif %}
+
+    <div class="row">
+    <div class="col-lg-6">
     {% if courses %}
       <table class="table table-striped">
         <strong>已选课程</strong>
@@ -39,5 +51,27 @@
       {% else %}
       <p>暂时没有选课哦</p>
       {% endif %}
-   
+      </div>
+
+      <div class="col-lg-6">
+        {% if xy_courses %}
+          <table class="table table-striped">
+            <strong>开设课程</strong>
+            <thead>
+                <td>课程号</td>
+                <td>课程名</td>
+                <td>教师号</td>
+            </thead>
+            {% for course in xy_courses %}
+            <tr>
+                <td>{{course.course_id}}</td>
+                <td>{{course.course_name}}</td>
+                <td>{{course.teacher_id}}</td>
+            </tr>
+            {% endfor %}
+          </table>
+          {% endif %}
+        </div>
+
+    </div>
 {% endblock content %}

@@ -41,7 +41,7 @@
             <td>{{teacher.id}}</td>
             <td>{{teacher.teacher_name}}</td>
             <td>{{teacher.teacher_dept}}</td>
-            <td><a>delete</a></td>
+            <td><a href="{{url_for('delete_teacher',s_id=teacher.id)}}">delete</a></td>
         </tr>
         {% endfor %}
       </table>

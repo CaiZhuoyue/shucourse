@@ -17,11 +17,15 @@
             <td>{{course.course_id}}</td>
             <td>{{course.course_name}}</td>
             <td>{{course.teacher_id}}</td>
-            <td>{{course.grade}}</td>
+            {% if course.student_grade %}
+            <td>{{course.student_grade}}</td>
+            {% else %}
+            <td>尚无成绩</td>
+            {% endif %}
         </tr>
         {% endfor %}
       </table>
-      <span>平均成绩</span><span></span>
+      <span>平均成绩:</span><span>{{avg_grade.average}}</span>
       {% else %}
       <p>暂时没有成绩哦</p>
       {% endif %}

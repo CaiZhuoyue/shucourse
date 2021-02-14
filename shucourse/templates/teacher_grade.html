@@ -1,5 +1,27 @@
 {% extends "layout2.html" %}
 {% block content %}
+
+<div class="content-section">
+  <form method="POST" action="">
+      {{ form.hidden_tag() }}
+      {{ form.csrf_token }}
+      <fieldset class="form-group">
+          <div class="form-group">
+            {{form.student_id.label(class="form-control-label") }}
+            {{form.student_id(class="form-control form-control-lg") }}
+          </div>
+          <div class="form-group">
+            {{form.grade.label(class="form-control-label") }}
+            {{form.grade(class="form-control form-control-lg") }}
+          </div>
+      </fieldset>
+      <div class="form-group">
+          {{ form.submit(class="btn btn-outline-info btn-green") }}
+      </div>
+  </form>
+</div>
+
+
 {% if students %}
       <table class="table table-striped">
         <strong>{{course_name}}分数统计</strong>
@@ -12,8 +34,8 @@
           <tr> 
             <td>{{student.student_id}}</td>
             <td>{{student.student_name}}</td>
-            {% if student.grade %}
-            <td>{{student.grade}}</td>
+            {% if student.student_grade %}
+            <td>{{student.student_grade}}</td>
             {% else %}
             <td>尚未发布</td>
             {% endif %}

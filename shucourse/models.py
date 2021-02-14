@@ -44,8 +44,10 @@ class Admin(db.Model,UserMixin):
 class Course(db.Model):
     course_id=db.Column(db.String(8),primary_key=True,unique=True)
     course_name=db.Column(db.String(20),nullable=False)
-    # 课程的老师号
+    # 课程的教师号
     course_teacher=db.Column(db.String(8),nullable=False)
+    # 开课时间
+    # course_time=db.Column(db.String(20))
     grade=db.Column(db.Integer)
     def __repr__(self):
         return f"Course('{self.course_id}','{self.course_name}','{self.course_teacher}')"
@@ -61,8 +63,10 @@ class Select(db.Model):
     teacher_id=db.Column(db.String(4),db.ForeignKey('teacher.id'),nullable=False)
     # 外键
     student_id=db.Column(db.String(8),db.ForeignKey('student.id'),nullable=False)
+    student_grade=db.Column(db.Integer)
+
     def __repr__(self):
-        return f"Select('{self.course_id}','{self.student_id}'"
+        return f"Select('{self.course_id}','{self.student_id}','{self.course_name}','{self.teacher_id}','{self.student_grade}'"
 
 
 

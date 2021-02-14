@@ -38,7 +38,7 @@
             <td>{{student.id}}</td>
             <td>{{student.student_name}}</td>
             <td>{{student.student_dept}}</td>
-            <td><a>delete</a></td>
+            <td><a href="{{url_for('delete_student',s_id=student.id)}}">delete</a></td>
         </tr>
         {% endfor %}
       </table>
