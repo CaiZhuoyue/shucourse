@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, Length,EqualTo
 from shucourse.models import Student,Teacher,Admin,Course,Select
 class LoginForm(FlaskForm):
     user_id=StringField(u'学号/教师号',validators=[DataRequired(),Length(min=4,max=8)])
-    password=PasswordField(u'密码',validators=[DataRequired()])
+    password=PasswordField(u'密码',validators=[DataRequired(),Length(min=6,max=20)])
     remember=BooleanField(u'记住我')
     submit=SubmitField(u'登陆')
     
@@ -28,6 +28,7 @@ class StudentForm(FlaskForm):
 
 class TeacherForm(FlaskForm):
     teacher_id=StringField(u'教师号:',validators=[DataRequired(),Length(min=4,max=4)])
+    teacher_password=PasswordField(u'密码',validators=[DataRequired()])
     teacher_name=StringField(u'姓名:',validators=[DataRequired(),Length(min=2,max=20)])
     teacher_dept=StringField(u'学院号:',validators=[DataRequired(),Length(min=1,max=2)])
     submit=SubmitField(u'添加教师')

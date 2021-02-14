@@ -46,6 +46,7 @@ class Course(db.Model):
     course_name=db.Column(db.String(20),nullable=False)
     # 课程的老师号
     course_teacher=db.Column(db.String(8),nullable=False)
+    grade=db.Column(db.Integer)
     def __repr__(self):
         return f"Course('{self.course_id}','{self.course_name}','{self.course_teacher}')"
 

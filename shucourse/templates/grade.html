@@ -1,2 +1,28 @@
-<!-- 查成绩页面 -->
 
+
+{% extends "layout.html" %}
+{% block content %}
+<legend>学生成绩查询</legend>
+    {% if courses %}
+      <table class="table table-striped">
+        <strong>已选课程</strong>
+        <thead>
+            <td>课程号</td>
+            <td>课程名</td>
+            <td>教师号</td>
+            <td>成绩</td>
+        </thead>
+        {% for course in courses %}
+        <tr>
+            <td>{{course.course_id}}</td>
+            <td>{{course.course_name}}</td>
+            <td>{{course.teacher_id}}</td>
+            <td>{{course.grade}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      <span>平均成绩</span><span></span>
+      {% else %}
+      <p>暂时没有成绩哦</p>
+      {% endif %}
+{% endblock content %}

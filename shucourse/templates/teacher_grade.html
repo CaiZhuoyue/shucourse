@@ -12,7 +12,11 @@
           <tr> 
             <td>{{student.student_id}}</td>
             <td>{{student.student_name}}</td>
+            {% if student.grade %}
             <td>{{student.grade}}</td>
+            {% else %}
+            <td>尚未发布</td>
+            {% endif %}
           </tr> 
         {% endfor %}
       </table>

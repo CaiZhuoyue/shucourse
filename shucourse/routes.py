@@ -123,14 +123,15 @@ def delete_course():
         return redirect(url_for('home'))
     return render_template('delete.html',form=form,courses=courses)
 
-@app.route('/student/changepass')
+@app.route('/student/changepass',methods=['GET','POST'])
 @login_required
 def student_pwd():
     form=ChangeForm()
     if form.validate():
-        # student = Student(id=form.student_id.data,student_name=form.student_name.data,student_password=form.student_id.data,student_dept=form.student_dept.data)
+        student=Student.query.get(current_user.id)
+        student.student_password=(form.password.data)
         # db.session.add(student)
-        # db.session.commit()
+        db.session.commit()
         return redirect(url_for('home'))
     return render_template('change.html',form=form)
 
@@ -161,8 +162,9 @@ def admin_home():
 @app.route('/student/grade')
 @login_required
 def student_grade():
-    return "你想查成绩吗？"
-
+    # return "你想查成绩吗？"
+    courses=Select.query.filter_by(student_id=current_user.id).all()
+    return render_template('grade.html',courses=courses)
 
 @app.route('/admin/student',methods=['GET','POST'])
 # @login_required
@@ -184,7 +186,7 @@ def add_teacher():
     teachers=Teacher.query.all()
     form=TeacherForm()
     if form.validate():
-        teacher = Teacher(id=form.teacher_id.data,teacher_name=form.teacher_name.data,teacher_password=form.teacher_id.data,teacher_dept=form.teacher_dept.data)
+        teacher = Teacher(id=form.teacher_id.data,teacher_name=form.teacher_name.data,teacher_password=form.teacher_password.data,teacher_dept=form.teacher_dept.data)
         db.session.add(teacher)
         db.session.commit()
         teachers=Teacher.query.all()
