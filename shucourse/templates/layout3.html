@@ -3,32 +3,32 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="../static/main.css"> -->
     <title></title>
-    <body>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <body style="background-color:#fff">
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <!-- 导航条开始 -->
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
+        <nav class="navbar navbar-default" style="background-color:#3f72af">
+          <div class="container-fluid">
               <!-- Brand and toggle get grouped for better mobile display -->
               <div class="row">
                 <div class="col-lg-2"></div>
                 <div class="col-lg-8">
               <div class="navbar-header">
-                <a class="navbar-brand" href="{{url_for('admin_home')}}">shucourse</a>
+                <a class="navbar-brand" href="{{url_for('admin_home')}}" style="color:whitesmoke">shucourse</a>
               </div>
               <!-- Collect the nav links, forms, and other content for toggling -->
-              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                  <ul class="nav navbar-nav">
-                    <li><a href="{{url_for('add_student')}}">学生信息管理</a></li>
-                    <li><a href="{{url_for('add_teacher')}}">教师信息管理</a></li>
-                    <li><a href="{{url_for('add_course')}}">课程信息管理</a></li>
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="background-color:#3f72af">
+                  <ul class="nav navbar-nav" style="background-color:#3f72af">
+                    <li><a href="{{url_for('add_student')}}" style="color: whitesmoke;">学生信息管理</a></li>
+                    <li><a href="{{url_for('add_teacher')}}" style="color: whitesmoke;">教师信息管理</a></li>
+                    <li><a href="{{url_for('add_course')}}" style="color: whitesmoke;">课程信息管理</a></li>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                       {% if current_user.is_authenticated %} 
                       <div>欢迎管理员</div>
-                      <a class="nav-item nav-link" href="{{url_for('logout')}}">退出</a> 
+                      <a class="nav-item nav-link" href="{{url_for('logout')}}" style="color:#dbe2ef">退出</a> 
                       {% else %}
                       {% endif %}
-                      <a class="nav-item nav-link" href="{{url_for('logout')}}">退出</a> 
+                      <a class="nav-item nav-link" href="{{url_for('logout')}}" style="color:#dbe2ef">退出</a> 
 
                   </ul>
               </div><!-- /.navbar-collapse -->

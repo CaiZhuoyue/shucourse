@@ -1,4 +1,4 @@
-{% extends "layout3.html" %}
+{% extends "layout_login.html" %}
 {% block content %}
     <div class="content-section">
         <form method="POST" action="">
@@ -7,10 +7,10 @@
             <legend>管理员登陆</legend>
             <fieldset class="form-group">
                 <!-- <legend></legend> -->
-                <div class="alert">
+                <!-- <div class="alert">
                     管理员账号是0000
                     管理员密码是Admin123
-                </div>
+                </div> -->
                 <div class="form-group">
                     {{form.user_id.label(class="form-control-label") }}
                     {{form.user_id(class="form-control form-control-lg") }}
@@ -21,7 +21,7 @@
                 </div>
             </fieldset>
             <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
+                {{ form.submit(class="btn btn-primary") }}
             </div>
         </form>
     </div>

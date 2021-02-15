@@ -34,7 +34,7 @@ def login():
             if(next_page):
                 return redirect(next_page) 
             else:
-                return redirect(url_for('home'))
+                return redirect(url_for('select_course'))
         else:
             flash('登陆失败！','error')
     return render_template('login.html',form=form)
