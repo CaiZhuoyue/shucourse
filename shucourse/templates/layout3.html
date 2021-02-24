@@ -18,9 +18,9 @@
               <!-- Collect the nav links, forms, and other content for toggling -->
               <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="background-color:#3f72af">
                   <ul class="nav navbar-nav" style="background-color:#3f72af">
-                    <li><a href="{{url_for('add_student')}}" style="color: whitesmoke;">学生信息管理</a></li>
-                    <li><a href="{{url_for('add_teacher')}}" style="color: whitesmoke;">教师信息管理</a></li>
-                    <li><a href="{{url_for('add_course')}}" style="color: whitesmoke;">课程信息管理</a></li>
+                    <li><a href="{{url_for('admin_student')}}" style="color: whitesmoke;">学生信息管理</a></li>
+                    <li><a href="{{url_for('admin_teacher')}}" style="color: whitesmoke;">教师信息管理</a></li>
+                    <li><a href="{{url_for('admin_course')}}" style="color: whitesmoke;">课程信息管理</a></li>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                       {% if current_user.is_authenticated %} 

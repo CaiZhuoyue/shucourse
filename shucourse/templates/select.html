@@ -29,49 +29,31 @@
     {% if message %}
     <strong><div style="color:red;">{{message}}</div></strong>
     {% endif %}
-
-    <div class="row">
-    <div class="col-lg-6">
     {% if courses %}
       <table class="table table-striped">
-        <strong>已选课程</strong>
         <thead>
             <td>课程号</td>
             <td>课程名</td>
-            <td>教师号</td>
+            <td>授课老师</td>
+            <td>学分</td>
+            <td>上课时间</td>
+            <td>人数限制</td>
+            <td>是否开课</td>
         </thead>
         {% for course in courses %}
         <tr>
             <td>{{course.course_id}}</td>
             <td>{{course.course_name}}</td>
-            <td>{{course.teacher_id}}</td>
+            <td>{{course.course_teacher}}</td>
+            <td>{{course.course_xuefen}}</td>
+            <td>{{course.course_time}}</td>
+            <td>{{course.course_maxn}}</td>
+            <td><a href="{{url_for('delete_student',s_id=current_user.id)}}">删除</a></td>
         </tr>
         {% endfor %}
       </table>
       {% else %}
-      <p>暂时没有选课哦</p>
+      <p>暂时没有课程哦</p>
       {% endif %}
-      </div>
-
-      <div class="col-lg-6">
-        {% if xy_courses %}
-          <table class="table table-striped">
-            <strong>开设课程</strong>
-            <thead>
-                <td>课程号</td>
-                <td>课程名</td>
-                <td>教师号</td>
-            </thead>
-            {% for course in xy_courses %}
-            <tr>
-                <td>{{course.course_id}}</td>
-                <td>{{course.course_name}}</td>
-                <td>{{course.teacher_id}}</td>
-            </tr>
-            {% endfor %}
-          </table>
-          {% endif %}
-        </div>
-
     </div>
 {% endblock content %}

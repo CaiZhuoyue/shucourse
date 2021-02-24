@@ -90,22 +90,22 @@ def logout():
 @app.route('/student/select',methods=['GET','POST'])
 @login_required
 def select_course():
-    courses=Select.query.filter_by(student_id=current_user.id)
-    xy_courses=Course.query.all()
+    # courses=Select.query.filter_by(student_id=current_user.id)
+    courses=Select.query.filter_by(student_id=current_user.id).with_entities(Course,Select.student_id==current_user.id,Select.course_id==Course.course_id).add_columns(Course.course_xuefen,Course.course_maxn,Course.course_time,Course.course_open,Select.course_id,Select.course_name,Course.course_teacher)
     form=XuankeForm()
     if form.validate():
-        # 有这门课
         select_course=Course.query.filter_by(course_id=form.course_id.data).first()
         already_select=Select.query.filter_by(course_id=form.course_id.data,student_id=current_user.id).first()
         if already_select:
-            return render_template('select.html',form=form,xy_courses=xy_courses,courses=courses,message="重复选课")
+            return render_template('select.html',form=form,courses=courses,message="重复选课")
         elif select_course:
             select = Select(student_id=current_user.id,course_id=form.course_id.data,teacher_id=form.teacher_id.data,course_name=select_course.course_name)
             db.session.add(select)
             db.session.commit()
+            return render_template('select.html',form=form,courses=courses)
         else:
-            return render_template('select.html',form=form,courses=courses,xy_courses=xy_courses,message="课程不存在")
-    return render_template('select.html',form=form,xy_courses=xy_courses,courses=courses)
+            return render_template('select.html',form=form,courses=courses,message="课程不存在")
+    return render_template('select.html',form=form,courses=courses)
 
 @app.route('/student/delete',methods=['GET','POST'])
 @login_required
@@ -176,16 +176,22 @@ def student_grade():
 
 @app.route('/admin/student',methods=['GET','POST'])
 # @login_required
-def add_student():
+def admin_student():
     students=Student.query.all()
+    return render_template('admin_student.html',students=students)
+
+@app.route('/admin/student/add',methods=['GET','POST'])
+# @login_required
+def add_student():
     form=StudentForm()
     if form.validate():
         student = Student(id=form.student_id.data,student_name=form.student_name.data,student_password=form.student_id.data,student_dept=form.student_dept.data)
         db.session.add(student)
         db.session.commit()
         students=Student.query.all()
-        return redirect(url_for('admin_home'))
-    return render_template('add_student.html',students=students,form=form)
+        return render_template('admin_student.html',students=students)
+    return render_template('add_student.html',form=form)
+
 
 @app.route('/admin/student/<string:s_id>',methods=['GET','POST'])
 # @login_required
@@ -201,9 +207,9 @@ def delete_student(s_id):
     db.session.delete(student)
     db.session.commit()
     students=Student.query.all()
-    return render_template('add_student.html',students=students,form=form)
+    return render_template('admin_student.html',students=students,form=form)
 
-@app.route('/admin/course/<string:s_id>',methods=['GET','POST'])
+@app.route('/admin/course/delete/<string:s_id>',methods=['GET','POST'])
 # @login_required
 def admin_delete_course(s_id):
     form=CourseForm()
@@ -217,32 +223,60 @@ def admin_delete_course(s_id):
     db.session.delete(course)
     db.session.commit()
     courses=Course.query.all()
-    return render_template('add_course.html',courses=courses,form=form)
+    return render_template('admin_course.html',courses=courses,form=form)
 
-@app.route('/admin/teacher',methods=['GET','POST'])
+@app.route('/admin/teacher/delete/<string:s_id>',methods=['GET','POST'])
+# @login_required
+def admin_delete_teacher(s_id):
+    form=TeacherForm()
+    teacher=Teacher.query.filter_by(id=s_id).first()
+    # 外键约束
+    select=Select.query.filter_by(teacher_id=s_id).first()
+    while select:
+        db.session.delete(select)
+        db.session.commit()
+        select=Select.query.filter_by(teacher_id=s_id).first()
+    db.session.delete(teacher)
+    db.session.commit()
+    teachers=Teacher.query.all()
+    return render_template('admin_teacher.html',teachers=teachers,form=form)
+
+
+
+
+@app.route('/admin/teacher/add',methods=['GET','POST'])
 # @login_required
 def add_teacher():
-    teachers=Teacher.query.all()
     form=TeacherForm()
     if form.validate():
-        teacher = Teacher(id=form.teacher_id.data,teacher_name=form.teacher_name.data,teacher_password=form.teacher_password.data,teacher_dept=form.teacher_dept.data)
+        teacher = Teacher(id=form.teacher_id.data,teacher_name=form.teacher_name.data,teacher_password=form.teacher_password.data,teacher_dept=form.teacher_dept.data,teacher_stat=form.teacher_stat.data)
         db.session.add(teacher)
         db.session.commit()
         teachers=Teacher.query.all()
-        return redirect(url_for('admin_home'))
-    return render_template('add_teacher.html',teachers=teachers,form=form)
+        return render_template('admin_teacher.html',teachers=teachers)
+    return render_template('add_teacher.html',form=form)
 
+@app.route('/admin/teacher',methods=['GET','POST'])
+# @login_required
+def admin_teacher():
+    teachers=Teacher.query.all()
+    return render_template('admin_teacher.html',teachers=teachers)
 
-@app.route('/admin/course',methods=['GET','POST'])
+@app.route('/admin/course',methods=['GET'])
+# @login_required
+def admin_course():
+    courses=Course.query.all()
+    return render_template('admin_course.html',courses=courses)
+
+@app.route('/admin/course/add',methods=['GET','POST'])
 # @login_required
 def add_course():
-    courses=Course.query.all()
     form=CourseForm()
     if form.validate():
-        course = Course(course_id=form.course_id.data,course_name=form.course_name.data,course_teacher=form.course_teacher.data)
+        course = Course(course_id=form.course_id.data,course_name=form.course_name.data,course_teacher=form.course_teacher.data,course_xuefen=form.course_xuefen.data,course_time=form.course_time.data,course_open=form.course_open.data,course_maxn=form.course_maxn.data)
         db.session.add(course)
         db.session.commit()
         courses=Course.query.all()
-        return redirect(url_for('admin_home'))
-    return render_template('add_course.html',courses=courses,form=form)
+        return render_template('admin_course.html',courses=courses)
+    return render_template('add_course.html',form=form)
 

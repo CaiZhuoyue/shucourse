@@ -1,0 +1,25 @@
+{% extends "layout3.html" %}
+{% block content %}
+<legend>学生管理</legend>
+<a href="{{url_for('add_student')}}">添加学生</a>
+    {% if students %}
+      <table class="table table-striped">
+        <thead>
+            <td>学号</td>
+            <td>姓名</td>
+            <td>学院号</td>
+        </thead>
+        {% for student in students %}
+        <tr>
+            <td>{{student.id}}</td>
+            <td>{{student.student_name}}</td>
+            <td>{{student.student_dept}}</td>
+            <td><a href="{{url_for('delete_student',s_id=student.id)}}">删除</a></td>
+        </tr>
+        {% endfor %}
+      </table>
+      {% else %}
+      <p>暂时没有学生哦</p>
+      {% endif %}
+
+{% endblock %}

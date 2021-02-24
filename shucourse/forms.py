@@ -31,6 +31,7 @@ class TeacherForm(FlaskForm):
     teacher_password=PasswordField(u'密码',validators=[DataRequired()])
     teacher_name=StringField(u'姓名:',validators=[DataRequired(),Length(min=2,max=20)])
     teacher_dept=StringField(u'学院号:',validators=[DataRequired(),Length(min=1,max=2)])
+    teacher_stat=StringField(u'职称:')
     submit=SubmitField(u'添加教师')
 
 
@@ -44,6 +45,10 @@ class CourseForm(FlaskForm):
     course_id=StringField(u'课程号:',validators=[DataRequired(),Length(min=8,max=8)])
     course_name=StringField(u'课程名:',validators=[DataRequired(),Length(min=2,max=20)])
     course_teacher=StringField(u'教师号:',validators=[DataRequired(),Length(min=4,max=4)])
+    course_time=StringField(u'上课时间:',validators=[DataRequired(),Length(min=1,max=20)])
+    course_open=BooleanField(u'是否开课',validators=[DataRequired()])
+    course_xuefen=IntegerField(u'学分',validators=[DataRequired()])
+    course_maxn=IntegerField(u'人数限制')
     submit=SubmitField(u'添加课程')
 
 

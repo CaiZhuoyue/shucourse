@@ -1,0 +1,28 @@
+{% extends "layout3.html" %}
+{% block content %}
+<legend>教师管理</legend>
+   
+    <a href="{{url_for('add_teacher')}}">添加教师</a>
+    {% if teachers %}
+      <table class="table table-striped">
+        <thead>
+            <td>教师号</td>
+            <td>姓名</td>
+            <td>学院号</td>
+            <td>职称</td>
+        </thead>
+        {% for teacher in teachers %}
+        <tr>
+            <td>{{teacher.id}}</td>
+            <td>{{teacher.teacher_name}}</td>
+            <td>{{teacher.teacher_dept}}</td>
+            <td>{{teacher.teacher_stat}}</td>
+            <td><a href="{{url_for('admin_delete_teacher',s_id=teacher.id)}}">删除</a></td>
+        </tr>
+        {% endfor %}
+      </table>
+      {% else %}
+      <p>暂时没有教师哦</p>
+      {% endif %}
+
+{% endblock %}

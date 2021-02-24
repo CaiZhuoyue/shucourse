@@ -30,6 +30,8 @@ class Teacher(db.Model,UserMixin):
     teacher_name=db.Column(db.String(20),nullable=False)
     teacher_password=db.Column(db.String(20),nullable=False)
     teacher_dept=db.Column(db.Integer,nullable=False)
+    # 教师职称
+    teacher_stat=db.Column(db.String(20))
     def __repr__(self):
         return f"Teacher('{self.id}','{self.teacher_name}','{self.teacher_password}','{self.teacher_dept}')"
 
@@ -47,14 +49,18 @@ class Course(db.Model):
     # 课程的教师号
     course_teacher=db.Column(db.String(8),nullable=False)
     # 开课时间
-    # course_time=db.Column(db.String(20))
+    course_time=db.Column(db.String(20))
+    # 课程最多人数
+    course_maxn=db.Column(db.Integer)
+    course_xuefen=db.Column(db.Integer)
+    # 是否开课
+    course_open=db.Column(db.Boolean)
     grade=db.Column(db.Integer)
     def __repr__(self):
         return f"Course('{self.course_id}','{self.course_name}','{self.course_teacher}')"
 
 # 选课表
 class Select(db.Model):
-
     select_id=db.Column(db.Integer,primary_key=True,unique=True)
     # 外键
     course_id=db.Column(db.String(8),db.ForeignKey('course.course_id'),nullable=False)
@@ -65,6 +71,10 @@ class Select(db.Model):
     student_id=db.Column(db.String(8),db.ForeignKey('student.id'),nullable=False)
     student_grade=db.Column(db.Integer)
 
+# 学院表
+class Department(db.Model):
+    dept_id=db.Column(db.String(2),primary_key=True,unique=True)
+    dept_name=db.Column(db.String(20),nullable=False)
     def __repr__(self):
         return f"Select('{self.course_id}','{self.student_id}','{self.course_name}','{self.teacher_id}','{self.student_grade}'"
 
